@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Claude Export to Markdown
 // @namespace    local
-// @version      0.2.15
+// @version      0.2.17
 // @description  Export current Claude conversation to a Markdown file by intercepting Claude's own Copy buttons.
 // @match        https://claude.ai/*
 // @grant        GM_registerMenuCommand
@@ -65,6 +65,52 @@
         URL.revokeObjectURL(url);
       }
     });
+  }
+
+  /********************************************************************
+   * Preload all messages by scrolling bottom to top
+   ********************************************************************/
+
+  async function preloadAllMessages() {
+    console.log('[Claude Export] Preloading messages...');
+
+    const scrollContainer = document.querySelector('[data-autoscroll-container="true"]');
+
+    if (!scrollContainer) {
+      console.warn('[Claude Export] Could not find scroll container');
+      return;
+    }
+
+    // Start at the bottom
+    scrollContainer.scrollTop = scrollContainer.scrollHeight;
+    await sleep(300);
+
+    let lastHeight = scrollContainer.scrollHeight;
+    let attempts = 0;
+    const maxAttempts = 100;
+
+    while (attempts < maxAttempts) {
+      // Scroll up
+      scrollContainer.scrollTop -= 500;
+      await sleep(200);
+
+      const currentHeight = scrollContainer.scrollHeight;
+
+      console.log(`[Claude Export] Preload attempt ${attempts + 1}: height = ${currentHeight}`);
+
+      // If we've reached the top or height hasn't changed, we're done
+      if (scrollContainer.scrollTop === 0 || currentHeight === lastHeight) {
+        console.log('[Claude Export] Preload complete');
+        break;
+      }
+
+      lastHeight = currentHeight;
+      attempts++;
+    }
+
+    // Return to bottom after preload
+    scrollContainer.scrollTop = scrollContainer.scrollHeight;
+    await sleep(300);
   }
 
   /********************************************************************
@@ -144,6 +190,8 @@
   async function exportConversation() {
     try {
       console.log('[Claude Export] Starting...');
+
+      await preloadAllMessages();
 
       await expandAllShowMore();
 
