@@ -30,15 +30,19 @@ Does not store artefacts.
 
 ```text
 ...
-[Claude Export] Starting... Claude Export to Markdown.user.js:145:15
-[Claude Export] Found 90 copy buttons Claude Export to Markdown.user.js:156:15
-[Claude Export] Capturing 1/90 Claude Export to Markdown.user.js:163:17
+[Claude Export] Preloading messages...
+[Claude Export] Preload attempt 1: height = 18463
+[Claude Export] Preload complete
 ...
-[Claude Export] Capturing 76/90 Claude Export to Markdown.user.js:163:17
-[Claude Export] Skipping 76/90 Claude Export to Markdown.user.js:169:19
+[Claude Export] Starting...
+[Claude Export] Found 90 copy buttons
+[Claude Export] Capturing 1/90 Claude
 ...
-[Claude Export] Capturing 90/90 Claude Export to Markdown.user.js:163:17
-[Claude Export] Done. Claude Export to Markdown.user.js:198:15
+[Claude Export] Capturing 76/90 Claude
+[Claude Export] Skipping 76/90 Claude
+...
+[Claude Export] Capturing 90/90 Claude
+[Claude Export] Done.
 ```
 
 Here, the skipped messages at 76 is where there was no "text answer" (ie. only artefacts).

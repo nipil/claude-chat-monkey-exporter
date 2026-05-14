@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Claude Export to Markdown
 // @namespace    local
-// @version      0.2.17
+// @version      0.2.18
 // @description  Export current Claude conversation to a Markdown file by intercepting Claude's own Copy buttons.
 // @match        https://claude.ai/*
 // @grant        GM_registerMenuCommand
@@ -87,12 +87,12 @@
 
     let lastHeight = scrollContainer.scrollHeight;
     let attempts = 0;
-    const maxAttempts = 100;
+    const maxAttempts = 1000;
 
     while (attempts < maxAttempts) {
       // Scroll up
-      scrollContainer.scrollTop -= 500;
-      await sleep(200);
+      scrollContainer.scrollTop -= 100;
+      await sleep(500);
 
       const currentHeight = scrollContainer.scrollHeight;
 
